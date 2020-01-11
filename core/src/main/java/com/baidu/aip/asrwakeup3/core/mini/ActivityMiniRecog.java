@@ -23,9 +23,13 @@ import com.baidu.speech.asr.SpeechConstant;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static com.baidu.speech.asr.SpeechConstant.ACCEPT_AUDIO_DATA;
+import static com.baidu.speech.asr.SpeechConstant.OUT_FILE;
 
 /**
  * 集成文档： http://ai.baidu.com/docs#/ASR-Android-SDK/top 集成指南一节
@@ -50,6 +54,10 @@ public class ActivityMiniRecog extends AppCompatActivity implements EventListene
     private boolean logTime = true;
 
     protected boolean enableOffline = false; // 测试离线命令词，需要改成true
+    static String baseDir = "/storage/emulated/0/baiduASR/";
+    public static final String audioInDir = baseDir+"outfile.pcm";
+    public static final String audioOutDir = baseDir+"audioOut.mp3";
+
 
     /**
      * 基于SDK集成2.2 发送开始事件
@@ -67,6 +75,11 @@ public class ActivityMiniRecog extends AppCompatActivity implements EventListene
         }
         // 基于SDK集成2.1 设置识别参数
         params.put(SpeechConstant.ACCEPT_AUDIO_VOLUME, false);
+        params.put(ACCEPT_AUDIO_DATA,true);
+        if (!new File(baseDir).exists()){
+            new File(baseDir).mkdir();
+        }
+        params.put(OUT_FILE,audioInDir);
         // params.put(SpeechConstant.NLU, "enable");
         // params.put(SpeechConstant.VAD_ENDPOINT_TIMEOUT, 0); // 长语音
 
@@ -225,7 +238,10 @@ public class ActivityMiniRecog extends AppCompatActivity implements EventListene
         }
 
 
+
         printLog(logTxt);
+
+
     }
 
     private void printLog(String text) {
